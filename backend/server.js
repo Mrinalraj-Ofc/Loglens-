@@ -37,5 +37,10 @@ app.listen(PORT, () => {
   ╚══════════════════════════════════════════╝
   `);
 });
-
+app.get("/", (req, res) => {
+  res.json({
+    status: "ok",
+    service: "LogLens Backend"
+  });
+});
 export default app;
