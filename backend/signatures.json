@@ -1,0 +1,49 @@
+{
+  "_comment": "LogLens Attack Signature Database. Each signature has a regex pattern, severity level, and description. Patterns are tested against the request path AND user-agent string.",
+
+  "sql_injection": [
+    { "id": "SQLi-001", "pattern": "(?:union.{0,20}select|select.{0,20}from|insert.{0,20}into|delete.{0,20}from|drop.{0,20}table|update.{0,20}set)", "severity": "critical", "description": "Classic SQL keyword chaining" },
+    { "id": "SQLi-002", "pattern": "(?:'\\s*(?:or|and)\\s*'?\\s*\\d|1\\s*=\\s*1|'\\s*=\\s*')", "severity": "critical", "description": "Boolean-based SQL injection" },
+    { "id": "SQLi-003", "pattern": "(?:sleep\\s*\\(|benchmark\\s*\\(|waitfor\\s+delay)", "severity": "critical", "description": "Time-based blind SQL injection" },
+    { "id": "SQLi-004", "pattern": "(?:information_schema|sys\\.tables|sysobjects|pg_tables)", "severity": "high",     "description": "Database schema enumeration" },
+    { "id": "SQLi-005", "pattern": "(?:load_file|into\\s+outfile|into\\s+dumpfile)",              "severity": "critical", "description": "SQL file read/write" },
+    { "id": "SQLi-006", "pattern": "(?:exec\\s*\\(|execute\\s*\\(|xp_cmdshell)",                 "severity": "critical", "description": "SQL stored procedure execution" }
+  ],
+
+  "xss": [
+    { "id": "XSS-001", "pattern": "<script[^>]*>",                                               "severity": "high",     "description": "Inline script tag" },
+    { "id": "XSS-002", "pattern": "javascript\\s*:",                                              "severity": "high",     "description": "JavaScript protocol URI" },
+    { "id": "XSS-003", "pattern": "(?:onerror|onload|onclick|onmouseover)\\s*=",                 "severity": "high",     "description": "HTML event handler injection" },
+    { "id": "XSS-004", "pattern": "(?:document\\.cookie|document\\.write|window\\.location)",    "severity": "high",     "description": "DOM-based XSS" },
+    { "id": "XSS-005", "pattern": "(?:%3Cscript|%3cscript|\\\\u003cscript)",                     "severity": "medium",   "description": "URL/Unicode-encoded script tag" },
+    { "id": "XSS-006", "pattern": "(?:alert\\s*\\(|confirm\\s*\\(|prompt\\s*\\()",               "severity": "medium",   "description": "JavaScript dialog injection" }
+  ],
+
+  "directory_traversal": [
+    { "id": "LFI-001", "pattern": "(?:\\.\\./){2,}",                                             "severity": "high",     "description": "Path traversal (dot-dot-slash)" },
+    { "id": "LFI-002", "pattern": "(?:%2e%2e%2f|%2e%2e/|\\.%2e/|%2e\\./){1,}",                 "severity": "high",     "description": "URL-encoded path traversal" },
+    { "id": "LFI-003", "pattern": "(?:/etc/passwd|/etc/shadow|/etc/hosts|/proc/self)",            "severity": "critical", "description": "Unix sensitive file access" },
+    { "id": "LFI-004", "pattern": "(?:win\\.ini|system32|%systemroot%|c:\\\\windows)",            "severity": "critical", "description": "Windows sensitive file access" },
+    { "id": "LFI-005", "pattern": "(?:php://input|php://filter|data://text)",                    "severity": "high",     "description": "PHP wrapper LFI" }
+  ],
+
+  "command_injection": [
+    { "id": "CMD-001", "pattern": "(?:;\\s*(?:ls|cat|id|whoami|wget|curl|bash|sh)\\s)",          "severity": "critical", "description": "Unix command chaining" },
+    { "id": "CMD-002", "pattern": "(?:\\|\\s*(?:ls|cat|id|whoami|nc|netcat|bash))",              "severity": "critical", "description": "Unix pipe command injection" },
+    { "id": "CMD-003", "pattern": "(?:`[^`]+`|\\$\\([^)]+\\))",                                  "severity": "critical", "description": "Command substitution" },
+    { "id": "CMD-004", "pattern": "(?:eval\\s*\\(|system\\s*\\(|passthru\\s*\\(|exec\\s*\\()",  "severity": "critical", "description": "PHP code/command execution" }
+  ],
+
+  "scanner": [
+    { "id": "SCAN-001", "pattern": "(?:nikto|nessus|openvas|nmap|masscan|zap)",                  "severity": "medium",   "description": "Known vulnerability scanner user-agent" },
+    { "id": "SCAN-002", "pattern": "(?:sqlmap|havij|pangolin)",                                  "severity": "high",     "description": "SQL injection scanner" },
+    { "id": "SCAN-003", "pattern": "(?:dirbuster|gobuster|wfuzz|ffuf|dirb)",                     "severity": "medium",   "description": "Directory brute-force tool" },
+    { "id": "SCAN-004", "pattern": "(?:hydra|medusa|thc-hydra|burpsuite|metasploit)",            "severity": "high",     "description": "Exploitation framework" }
+  ],
+
+  "credential_stuffing": [
+    { "id": "CRED-001", "pattern": "(?:/wp-login\\.php|/wp-admin|xmlrpc\\.php)",                 "severity": "medium",   "description": "WordPress auth endpoint probe" },
+    { "id": "CRED-002", "pattern": "(?:/admin/login|/administrator|/phpmyadmin)",                "severity": "medium",   "description": "Admin panel discovery" },
+    { "id": "CRED-003", "pattern": "(?:/\\.git/|/\\.env|/\\.htpasswd|/\\.htaccess)",             "severity": "high",     "description": "Sensitive file exposure" }
+  ]
+}
